@@ -31,3 +31,4 @@
 [0404/185826.290:ERROR:file_io_win.cc(180)] CreateFile C:\Users\azizb\AppData\Local\Temp\scoped_dir5072_342978055\Crashpad\settings.dat: Le processus ne peut pas accéder au fichier car ce fichier est utilisé par un autre processus. (0x20)
 [0404/192819.004:ERROR:file_io_win.cc(180)] CreateFile C:\Users\azizb\AppData\Local\Temp\scoped_dir2084_866698412\Crashpad\settings.dat: Le processus ne peut pas accéder au fichier car ce fichier est utilisé par un autre processus. (0x20)
 [0404/203913.191:ERROR:file_io_win.cc(180)] CreateFile C:\Users\azizb\AppData\Local\Temp\scoped_dir12580_1900734921\Crashpad\settings.dat: Le processus ne peut pas accéder au fichier car ce fichier est utilisé par un autre processus. (0x20)
+[0405/010844.892:ERROR:file_io_win.cc(180)] CreateFile C:\Users\azizb\AppData\Local\Temp\scoped_dir18304_224158094\Crashpad\settings.dat: Le processus ne peut pas accéder au fichier car ce fichier est utilisé par un autre processus. (0x20)

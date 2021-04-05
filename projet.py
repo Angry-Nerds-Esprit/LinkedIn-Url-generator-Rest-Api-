@@ -1,13 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-This is a modification of the code sourced from this article: https://www.linkedin.com/pulse/how-easy-scraping-data-from-linkedin-profiles-david-craven/?trackingId=HUfuRSjER1iAyeWmcgHbyg%3D%3D
-It is a web scraper scraping google for linkedin profiles; the use case would be recruiters sourcing target candidates for recruiting purposes. 
-Also copied the find_profiles function from here: https://www.pingshiuanchua.com/blog/post/scraping-search-results-from-google-search 
-"""
-
 import json
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
@@ -20,11 +11,17 @@ import numpy
 import flask
 import requests
 from flask import request,jsonify
+from pymongo import MongoClient
+
 
 class api :
     app = None
     def __init__(self ):
-
+         
+        self.nbp = 1
+        self.myclient = MongoClient('localhost',27017)
+        self.db = self.myclient['SonicHr']
+        self.collection_profiles = self.db['profiles']
         self.links = []
         self.titles = []
         self.descriptions = []
@@ -32,10 +29,9 @@ class api :
         self.soup=None 
         self.result_div =None
     
-    
     def home(self):
 
-    
+        self.links = []
         
     
 
@@ -44,7 +40,24 @@ class api :
             query = str(request.args['query'])
             print(query)
         else:
-            return "Error: No id field provided. Please specify an id."
+            return "Error: No id field provided. Please specify an idQuery."
+
+        if 'nbp' in request.args:
+            nbp = str(request.args['nbp'])
+            print(nbp)
+        else:
+            return "Error: No id field provided. Please specify an idPages."
+        if 'idf' in request.args:
+            idf = str(request.args['idf'])
+            print(idf)
+        else:
+            return "Error: No id field provided. Please specify an idFolder."
+        if 'idUser' in request.args:
+            idUser = str(request.args['idUser'])
+            print(idUser)
+        else:
+            return "Error: No id field provided. Please specify an idUser."
+      
         # specifies the path to the chromedriver.exe
         
 
@@ -101,28 +114,30 @@ class api :
     
 
         # Function call x10 of function profiles_loop; you can change the number to as many pages of search as you like. 
-        self.repeat_fun(2, self.profiles_loop)
+        self.repeat_fun(self.nbp, self.profiles_loop)
 
 
         # Separates out just the First/Last Names for the titles variable
         titles01 = [i.split()[0:2] for i in self.titles]
         
-        jsonString = json.dumps(self.links)
         for link in self.links:
             origin=link[8:link.index('.')]
-
+           
 
             body=link[link.rfind('/')+1:]
 
             finalLink="https://www.linkedin.com/in/"+body+"?=originalSubdomain="+origin
- 
+  
             print(finalLink)
             response = requests.get('http://127.0.0.1:5000/api?url='+finalLink)
             
             data = response.json()
+            data['idFolder'] = [idf]
+            data['idUser'] = idUser
+            self.collection_profiles.insert_one(data)
             print(data) 
 
-        return jsonString
+        return data
         
         
 
@@ -187,11 +202,3 @@ def start():
 
 start
 app.run(port=5001)
-
-
-
-
-
-
-
-
