@@ -25,7 +25,7 @@ class api :
         self.links = []
         self.titles = []
         self.descriptions = []
-        self.driver = webdriver.Chrome('C:/Users/azizb/chromedriver_win32/chromedriver.exe')
+        self.driver = webdriver.Chrome()
         self.soup=None 
         self.result_div =None
     
@@ -51,7 +51,7 @@ class api :
             idf = str(request.args['idf'])
             print(idf)
         else:
-            return "Error: No id field provided. Please specify an idFolder."
+            return "Error: No id field provided. Please specify an idf."
         if 'idUser' in request.args:
             idUser = str(request.args['idUser'])
             print(idUser)
@@ -133,7 +133,7 @@ class api :
             
             data = response.json()
             data['idFolder'] = [idf]
-            data['idUser'] = idUser
+            data['idUser'] = [idUser]
             self.collection_profiles.insert_one(data)
             print(data) 
 
